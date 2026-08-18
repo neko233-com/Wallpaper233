@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/Wallpaper233.App/Wallpaper233.App.csproj" />
+    <Project Path="src/Wallpaper233.Community/Wallpaper233.Community.csproj" />
     <Project Path="src/Wallpaper233.Compat/Wallpaper233.Compat.csproj" />
     <Project Path="src/Wallpaper233.Core/Wallpaper233.Core.csproj" />
   </Folder>

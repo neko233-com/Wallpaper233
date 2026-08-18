@@ -15,6 +15,11 @@ public sealed record Wallpaper233Manifest(
     [property: JsonPropertyName("title")] string Title,
     [property: JsonPropertyName("entry")] string Entry);
 
+[JsonSerializable(typeof(Wallpaper233Manifest))]
+internal sealed partial class WallpaperEngineJsonContext : JsonSerializerContext
+{
+}
+
 public sealed record ProjectDetectionResult(SourceFormat Format, string RootPath, string? Reason = null);
 
 public static class ProjectDetector
@@ -62,7 +67,7 @@ public static class ProjectDetector
         try
         {
             using var stream = File.OpenRead(path);
-            manifest = JsonSerializer.Deserialize<Wallpaper233Manifest>(stream);
+            manifest = JsonSerializer.Deserialize(stream, WallpaperEngineJsonContext.Default.Wallpaper233Manifest);
             return manifest is not null;
         }
         catch (JsonException)

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Wallpaper233.Core\Wallpaper233.Core.csproj" />
+    <ProjectReference Include="..\..\src\Wallpaper233.Community\Wallpaper233.Community.csproj" />
   </ItemGroup>
 
 </Project>

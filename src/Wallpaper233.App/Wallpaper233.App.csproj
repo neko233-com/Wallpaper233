@@ -11,6 +11,14 @@
     <UseWinUI>true</UseWinUI>
     <WinUISDKReferences>false</WinUISDKReferences>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <EnableUnsafeBlocks>true</EnableUnsafeBlocks>
+    <!-- WinUI stays JIT/self-contained; NativeAOT is reserved for the isolated renderer. -->
+    <PublishAot Condition="'$(PublishAot)' == ''">false</PublishAot>
+    <IlcOptimizationPreference Condition="'$(PublishAot)' == 'true'">Speed</IlcOptimizationPreference>
+    <StripSymbols>false</StripSymbols>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -49,6 +57,7 @@
     <PropertyGroup> above to opt out.
   -->
   <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.1.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2526" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.4.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools.WinApp" Version="0.6.0" />
@@ -57,6 +66,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Wallpaper233.Core\Wallpaper233.Core.csproj" />
     <ProjectReference Include="..\Wallpaper233.Compat\Wallpaper233.Compat.csproj" />
+    <ProjectReference Include="..\Wallpaper233.Community\Wallpaper233.Community.csproj" />
   </ItemGroup>
 
   <!--
@@ -72,6 +82,7 @@
   <PropertyGroup>
     <!-- Keep WinUI reflection and generated bindings safe until publish profiling is complete. -->
     <PublishReadyToRun>False</PublishReadyToRun>
-    <PublishTrimmed>False</PublishTrimmed>
+    <PublishTrimmed Condition="'$(PublishAot)' == 'true'">True</PublishTrimmed>
+    <PublishTrimmed Condition="'$(PublishAot)' != 'true'">False</PublishTrimmed>
   </PropertyGroup>
 </Project>
