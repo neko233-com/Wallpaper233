@@ -97,6 +97,22 @@ public sealed partial class MainPage : Page, IDisposable
         }
     }
 
+    private void LibrarySearchChanged(object sender, TextChangedEventArgs e)
+    {
+        if (!_initializing)
+        {
+            RefreshLibrary();
+        }
+    }
+
+    private void LibrarySortChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_initializing)
+        {
+            RefreshLibrary();
+        }
+    }
+
     private void LibraryDoubleTapped(object sender, Microsoft.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
     {
         if (LibraryList.SelectedItem is LibraryItem item)
@@ -130,6 +146,43 @@ public sealed partial class MainPage : Page, IDisposable
 
         _settings = _settings with { RestoreOnLaunch = RestoreOnLaunchCheckBox.IsChecked == true };
         _settingsStore.Save(_settings);
+    }
+
+    private void ContextApplyClick(object sender, RoutedEventArgs e)
+    {
+        if ((sender as MenuFlyoutItem)?.Tag is LibraryItem item)
+        {
+            ApplyWallpaper(item);
+        }
+    }
+
+    private void ContextPreviewClick(object sender, RoutedEventArgs e)
+    {
+        if ((sender as MenuFlyoutItem)?.Tag is LibraryItem item)
+        {
+            _runtime.Start(EngineMode.Preview, RenderBackend.SafeMode);
+            _wallpaperHost.Preview(item, _settings.FitMode);
+            LibrarySummaryText.Text = $"正在预览：{item.DisplayName}";
+        }
+    }
+
+    private void ContextOpenLocationClick(object sender, RoutedEventArgs e)
+    {
+        if ((sender as MenuFlyoutItem)?.Tag is not LibraryItem item)
+        {
+            return;
+        }
+
+        var path = File.Exists(item.FilePath) ? item.FilePath : _library.RootPath;
+        var arguments = File.Exists(item.FilePath)
+            ? $"/select,\"{path}\""
+            : $"\"{path}\"";
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = "explorer.exe",
+            Arguments = arguments,
+            UseShellExecute = true,
+        });
     }
 
     private async void OpenWorkshopClick(object sender, RoutedEventArgs e)
@@ -193,10 +246,24 @@ public sealed partial class MainPage : Page, IDisposable
 
     private void RefreshLibrary()
     {
-        LibraryList.ItemsSource = _library.Items.ToArray();
+        var query = LibrarySearchBox?.Text.Trim() ?? string.Empty;
+        IEnumerable<LibraryItem> items = _library.Items;
+        if (query.Length > 0)
+        {
+            items = items.Where(item => item.DisplayName.Contains(query, StringComparison.OrdinalIgnoreCase));
+        }
+
+        items = LibrarySortComboBox?.SelectedIndex == 1
+            ? items.OrderBy(item => item.DisplayName, StringComparer.OrdinalIgnoreCase)
+            : items.OrderByDescending(item => item.ImportedAt);
+
+        var visibleItems = items.ToArray();
+        LibraryList.ItemsSource = visibleItems;
         LibrarySummaryText.Text = _library.Items.Count == 0
             ? "拖拽图片或视频开始使用"
-            : $"共 {_library.Items.Count} 个项目";
+            : query.Length == 0
+                ? $"共 {_library.Items.Count} 个项目"
+                : $"显示 {visibleItems.Length} / {_library.Items.Count} 个项目";
     }
 
     private LibraryItem? SelectedOrFirstItem() =>

@@ -20,15 +20,16 @@
     <NavigationView x:Name="Navigation"
                     IsBackButtonVisible="Collapsed"
                     IsSettingsVisible="False"
-                    PaneDisplayMode="LeftCompact"
+                    PaneDisplayMode="Left"
+                    IsPaneToggleButtonVisible="False"
                     SelectionChanged="NavigationSelectionChanged">
         <NavigationView.MenuItems>
-            <NavigationViewItem Content="壁纸库" Tag="library" IsSelected="True">
+            <NavigationViewItem Content="已安装" Tag="library" IsSelected="True">
                 <NavigationViewItem.Icon>
                     <SymbolIcon Symbol="Pictures" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
-            <NavigationViewItem Content="社区中心" Tag="community">
+            <NavigationViewItem Content="创意工坊" Tag="community">
                 <NavigationViewItem.Icon>
                     <SymbolIcon Symbol="Globe" />
                 </NavigationViewItem.Icon>
@@ -46,21 +47,31 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="20" />
-                        <RowDefinition Height="180" />
+                        <RowDefinition Height="112" />
                         <RowDefinition Height="20" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
                     <Grid>
                         <StackPanel Spacing="4">
-                            <TextBlock Text="壁纸库" FontSize="30" FontWeight="SemiBold" />
+                            <TextBlock Text="已安装壁纸" FontSize="30" FontWeight="SemiBold" />
                             <TextBlock x:Name="LibrarySummaryText" Text="准备就绪" Opacity="0.68" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-                            <Button Content="安全预览" Click="StartPreviewClick" />
+                            <TextBox x:Name="LibrarySearchBox"
+                                     Width="210"
+                                     PlaceholderText="搜索壁纸"
+                                     TextChanged="LibrarySearchChanged" />
+                            <ComboBox x:Name="LibrarySortComboBox"
+                                      Width="138"
+                                      SelectedIndex="0"
+                                      SelectionChanged="LibrarySortChanged">
+                                <ComboBoxItem Content="最近添加" />
+                                <ComboBoxItem Content="名称" />
+                            </ComboBox>
+                            <Button Content="预览" Click="StartPreviewClick" />
                             <Button Content="应用到桌面" Click="ApplySelectedClick" />
                             <Button Content="导入文件" Click="ImportFilesClick" />
-                            <Button Content="打开文件夹" Click="OpenLibraryClick" />
                         </StackPanel>
                     </Grid>
 
@@ -73,10 +84,12 @@
                             BorderThickness="1"
                             CornerRadius="12"
                             Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
-                            <FontIcon Glyph="&#xE898;" FontSize="28" HorizontalAlignment="Center" />
-                            <TextBlock Text="拖拽图片或视频到这里" FontSize="18" HorizontalAlignment="Center" />
-                            <TextBlock Text="支持 PNG、JPG、WebP、MP4、WebM、MKV 等" Opacity="0.68" HorizontalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12">
+                            <FontIcon Glyph="&#xE898;" FontSize="22" VerticalAlignment="Center" />
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="拖入文件即可添加壁纸" FontSize="16" />
+                                <TextBlock Text="支持图片、视频；双击卡片应用到桌面，右键查看更多操作" Opacity="0.68" />
+                            </StackPanel>
                         </StackPanel>
                     </Border>
 
@@ -124,6 +137,13 @@
                                             </StackPanel>
                                         </Border>
                                     </Grid>
+                                    <Border.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="应用到桌面" Tag="{x:Bind}" Click="ContextApplyClick" />
+                                            <MenuFlyoutItem Text="安全预览" Tag="{x:Bind}" Click="ContextPreviewClick" />
+                                            <MenuFlyoutItem Text="打开所在文件夹" Tag="{x:Bind}" Click="ContextOpenLocationClick" />
+                                        </MenuFlyout>
+                                    </Border.ContextFlyout>
                                 </Border>
                             </DataTemplate>
                         </ListView.ItemTemplate>
