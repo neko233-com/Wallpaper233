@@ -16,7 +16,7 @@
   <mp:PhoneIdentity PhoneProductId="4FE2B105-EF50-465D-8D80-B25436F98BBD" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Wallpaper233.App</DisplayName>
+    <DisplayName>Wallpaper233</DisplayName>
     <PublisherDisplayName>Wallpaper233</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -35,8 +35,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Wallpaper233.App"
-        Description="Wallpaper233.App"
+        DisplayName="Wallpaper233"
+        Description="Windows-native open-source dynamic wallpapers"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">
