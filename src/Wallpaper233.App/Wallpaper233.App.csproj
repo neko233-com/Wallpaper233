@@ -33,6 +33,7 @@
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\AppIcon.ico" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\Wallpaper233Icon.png" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Assets\SampleWallpapers\*.png" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 

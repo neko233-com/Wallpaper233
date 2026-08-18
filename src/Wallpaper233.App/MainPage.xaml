@@ -23,6 +23,17 @@
                     PaneDisplayMode="Left"
                     IsPaneToggleButtonVisible="False"
                     SelectionChanged="NavigationSelectionChanged">
+        <NavigationView.PaneHeader>
+            <StackPanel Orientation="Horizontal" Spacing="10" Padding="14,18,14,10">
+                <Border Width="34" Height="34" CornerRadius="9" Background="#171A33">
+                    <Image Source="Assets/Wallpaper233Icon.png" Stretch="Uniform" />
+                </Border>
+                <StackPanel VerticalAlignment="Center" Spacing="0">
+                    <TextBlock Text="Wallpaper233" FontSize="15" FontWeight="SemiBold" />
+                    <TextBlock Text="动态壁纸" FontSize="11" Opacity="0.62" />
+                </StackPanel>
+            </StackPanel>
+        </NavigationView.PaneHeader>
         <NavigationView.MenuItems>
             <NavigationViewItem Content="已安装" Tag="library" IsSelected="True">
                 <NavigationViewItem.Icon>
@@ -58,10 +69,10 @@
                             <TextBlock x:Name="LibrarySummaryText" Text="准备就绪" Opacity="0.68" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-                            <TextBox x:Name="LibrarySearchBox"
-                                     Width="210"
-                                     PlaceholderText="搜索壁纸"
-                                     TextChanged="LibrarySearchChanged" />
+                            <Grid Width="210">
+                                <TextBox x:Name="LibrarySearchBox" Padding="36,0,8,0" PlaceholderText="搜索壁纸" TextChanged="LibrarySearchChanged" />
+                                <FontIcon Glyph="&#xE721;" Margin="12,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="False" Opacity="0.7" />
+                            </Grid>
                             <ComboBox x:Name="LibrarySortComboBox"
                                       Width="138"
                                       SelectedIndex="0"
@@ -69,9 +80,24 @@
                                 <ComboBoxItem Content="最近添加" />
                                 <ComboBoxItem Content="名称" />
                             </ComboBox>
-                            <Button Content="预览" Click="StartPreviewClick" />
-                            <Button Content="应用到桌面" Click="ApplySelectedClick" />
-                            <Button Content="导入文件" Click="ImportFilesClick" />
+                            <Button Click="StartPreviewClick" ToolTipService.ToolTip="安全预览">
+                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                    <FontIcon Glyph="&#xE768;" />
+                                    <TextBlock Text="预览" />
+                                </StackPanel>
+                            </Button>
+                            <Button Click="ApplySelectedClick" ToolTipService.ToolTip="应用当前选中的壁纸">
+                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                    <FontIcon Glyph="&#xE73E;" />
+                                    <TextBlock Text="应用到桌面" />
+                                </StackPanel>
+                            </Button>
+                            <Button Click="ImportFilesClick" ToolTipService.ToolTip="导入图片或视频">
+                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                    <FontIcon Glyph="&#xE898;" />
+                                    <TextBlock Text="导入文件" />
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                     </Grid>
 
