@@ -58,6 +58,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
                             <Button Content="安全预览" Click="StartPreviewClick" />
+                            <Button Content="应用到桌面" Click="ApplySelectedClick" />
                             <Button Content="导入文件" Click="ImportFilesClick" />
                             <Button Content="打开文件夹" Click="OpenLibraryClick" />
                         </StackPanel>
@@ -164,6 +165,12 @@
                                 <TextBlock Text="渲染与发布" FontSize="20" FontWeight="SemiBold" />
                                 <TextBlock Text="控制面板使用稳定的 .NET 自包含发布；独立渲染进程使用 NativeAOT + Direct3D 12。" TextWrapping="Wrap" />
                                 <TextBlock Text="网页壁纸运行时会单独隔离，避免 WebView2 的动态依赖影响主程序稳定性。" TextWrapping="Wrap" Opacity="0.68" />
+                                <ComboBox x:Name="FitModeComboBox" Header="壁纸适配" SelectedIndex="0" SelectionChanged="FitModeChanged">
+                                    <ComboBoxItem Content="裁剪铺满（推荐）" />
+                                    <ComboBoxItem Content="完整显示" />
+                                    <ComboBoxItem Content="拉伸填充" />
+                                </ComboBox>
+                                <CheckBox x:Name="RestoreOnLaunchCheckBox" Content="启动时恢复上次应用的壁纸" Click="RestoreOnLaunchClick" IsChecked="True" />
                             </StackPanel>
                         </Border>
                     </StackPanel>

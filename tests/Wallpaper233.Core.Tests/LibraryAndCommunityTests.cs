@@ -26,4 +26,29 @@ public sealed class LibraryAndCommunityTests
             "https://steamcommunity.com/sharedfiles/filedetails/?id=123456789",
             SteamCommunityBridge.BuildWorkshopUri("123456789").ToString());
     }
+
+    [Fact]
+    public void SettingsStorePersistsWallpaperSelection()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"Wallpaper233-tests-{Guid.NewGuid():N}");
+        try
+        {
+            var id = Guid.NewGuid();
+            var store = new WallpaperSettingsStore(root);
+            store.Save(new WallpaperSettings(id, WallpaperFitMode.Fit, false));
+
+            var loaded = store.Load();
+
+            Assert.Equal(id, loaded.AppliedWallpaperId);
+            Assert.Equal(WallpaperFitMode.Fit, loaded.FitMode);
+            Assert.False(loaded.RestoreOnLaunch);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, recursive: true);
+            }
+        }
+    }
 }

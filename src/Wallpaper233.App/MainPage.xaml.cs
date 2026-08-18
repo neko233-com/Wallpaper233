@@ -14,15 +14,24 @@ public sealed partial class MainPage : Page, IDisposable
 {
     private readonly WallpaperRuntime _runtime = new();
     private readonly LibraryCatalog _library = new();
+    private readonly WallpaperSettingsStore _settingsStore = new();
     private readonly WallpaperHostWindow _wallpaperHost = new();
+    private WallpaperSettings _settings = new();
+    private bool _initializing = true;
+    private bool _restored;
     private bool _disposed;
 
     public MainPage()
     {
+        _settings = _settingsStore.Load();
         InitializeComponent();
         Unloaded += OnUnloaded;
+        Loaded += OnLoaded;
         SeedBuiltInSamples();
         RefreshLibrary();
+        FitModeComboBox.SelectedIndex = (int)_settings.FitMode;
+        RestoreOnLaunchCheckBox.IsChecked = _settings.RestoreOnLaunch;
+        _initializing = false;
     }
 
     private void NavigationSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -67,12 +76,24 @@ public sealed partial class MainPage : Page, IDisposable
 
     private void StartPreviewClick(object sender, RoutedEventArgs e)
     {
+        var item = SelectedOrFirstItem();
+        if (item is null)
+        {
+            return;
+        }
+
         _runtime.Start(EngineMode.Preview, RenderBackend.SafeMode);
         _runtime.Tick(FrameTime.FromDelta(TimeSpan.Zero, TimeSpan.Zero));
-        if (_library.Items.Count > 0)
+        _wallpaperHost.Preview(item, _settings.FitMode);
+        LibrarySummaryText.Text = $"正在预览：{item.DisplayName}";
+    }
+
+    private void ApplySelectedClick(object sender, RoutedEventArgs e)
+    {
+        var item = SelectedOrFirstItem();
+        if (item is not null)
         {
-            _wallpaperHost.Show(_library.Items[0]);
-            LibrarySummaryText.Text = $"正在预览：{_library.Items[0].DisplayName}";
+            ApplyWallpaper(item);
         }
     }
 
@@ -80,10 +101,35 @@ public sealed partial class MainPage : Page, IDisposable
     {
         if (LibraryList.SelectedItem is LibraryItem item)
         {
-            _runtime.Start(EngineMode.Preview, RenderBackend.SafeMode);
-            _wallpaperHost.Show(item);
-            LibrarySummaryText.Text = $"正在预览：{item.DisplayName}";
+            ApplyWallpaper(item);
         }
+    }
+
+    private void FitModeChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_initializing || FitModeComboBox.SelectedIndex < 0)
+        {
+            return;
+        }
+
+        _settings = _settings with { FitMode = (WallpaperFitMode)FitModeComboBox.SelectedIndex };
+        _settingsStore.Save(_settings);
+
+        if (_settings.AppliedWallpaperId is Guid id && _library.Items.FirstOrDefault(item => item.Id == id) is { } item)
+        {
+            _wallpaperHost.Apply(item, _settings.FitMode);
+        }
+    }
+
+    private void RestoreOnLaunchClick(object sender, RoutedEventArgs e)
+    {
+        if (_initializing)
+        {
+            return;
+        }
+
+        _settings = _settings with { RestoreOnLaunch = RestoreOnLaunchCheckBox.IsChecked == true };
+        _settingsStore.Save(_settings);
     }
 
     private async void OpenWorkshopClick(object sender, RoutedEventArgs e)
@@ -151,6 +197,42 @@ public sealed partial class MainPage : Page, IDisposable
         LibrarySummaryText.Text = _library.Items.Count == 0
             ? "拖拽图片或视频开始使用"
             : $"共 {_library.Items.Count} 个项目";
+    }
+
+    private LibraryItem? SelectedOrFirstItem() =>
+        LibraryList.SelectedItem as LibraryItem ?? (_library.Items.Count > 0 ? _library.Items[0] : null);
+
+    private void ApplyWallpaper(LibraryItem item, bool persist = true)
+    {
+        _runtime.Start(EngineMode.Wallpaper, RenderBackend.SafeMode);
+        _wallpaperHost.Apply(item, _settings.FitMode);
+        if (persist)
+        {
+            _settings = _settings with { AppliedWallpaperId = item.Id };
+            _settingsStore.Save(_settings);
+        }
+
+        LibrarySummaryText.Text = $"已应用到桌面：{item.DisplayName}";
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        if (_restored)
+        {
+            return;
+        }
+
+        _restored = true;
+        if (!_settings.RestoreOnLaunch || _settings.AppliedWallpaperId is not Guid id)
+        {
+            return;
+        }
+
+        var item = _library.Items.FirstOrDefault(candidate => candidate.Id == id);
+        if (item is not null)
+        {
+            ApplyWallpaper(item, persist: false);
+        }
     }
 
     private void SeedBuiltInSamples()

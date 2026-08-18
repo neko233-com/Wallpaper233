@@ -24,6 +24,8 @@ public sealed class LibraryState
 [JsonSerializable(typeof(LibraryState))]
 [JsonSerializable(typeof(LibraryItem))]
 [JsonSerializable(typeof(MediaKind))]
+[JsonSerializable(typeof(WallpaperSettings))]
+[JsonSerializable(typeof(WallpaperFitMode))]
 internal sealed partial class WallpaperJsonContext : JsonSerializerContext
 {
 }
