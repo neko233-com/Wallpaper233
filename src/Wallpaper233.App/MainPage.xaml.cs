@@ -21,6 +21,7 @@ public sealed partial class MainPage : Page, IDisposable
     {
         InitializeComponent();
         Unloaded += OnUnloaded;
+        SeedBuiltInSamples();
         RefreshLibrary();
     }
 
@@ -150,6 +151,22 @@ public sealed partial class MainPage : Page, IDisposable
         LibrarySummaryText.Text = _library.Items.Count == 0
             ? "拖拽图片或视频开始使用"
             : $"共 {_library.Items.Count} 个项目";
+    }
+
+    private void SeedBuiltInSamples()
+    {
+        if (_library.Items.Count != 0)
+        {
+            return;
+        }
+
+        var sampleDirectory = Path.Combine(AppContext.BaseDirectory, "Assets", "SampleWallpapers");
+        if (!Directory.Exists(sampleDirectory))
+        {
+            return;
+        }
+
+        _library.ImportFiles(Directory.EnumerateFiles(sampleDirectory, "*.png"));
     }
 
     public void Dispose()
