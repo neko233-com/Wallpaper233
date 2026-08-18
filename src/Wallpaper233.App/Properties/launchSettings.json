@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Wallpaper233.App (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Wallpaper233.App (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

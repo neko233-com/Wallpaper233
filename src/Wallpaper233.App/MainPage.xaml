@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="Wallpaper233.App.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Wallpaper233.App"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="32" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="24" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Spacing="4">
+            <TextBlock Text="Wallpaper233" FontSize="32" FontWeight="SemiBold" />
+            <TextBlock Text="Windows 原生、开源、无 Steam 依赖的动态壁纸平台" Opacity="0.72" />
+        </StackPanel>
+
+        <Grid Grid.Row="2" ColumnSpacing="24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Padding="24" CornerRadius="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="运行时" FontSize="20" FontWeight="SemiBold" />
+                    <TextBlock x:Name="RuntimeStatusText" Text="初始化中…" />
+                    <TextBlock Text="Wallpaper233 只把旧格式作为导入来源，核心运行时使用自有模型。" TextWrapping="Wrap" Opacity="0.72" />
+                    <Button Content="启动安全预览" Click="StartPreviewClick" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Padding="24" CornerRadius="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="当前边界" FontSize="20" FontWeight="SemiBold" />
+                    <TextBlock Text="• 纯 C# 应用代码" />
+                    <TextBlock Text="• WinUI 3 / Windows App SDK" />
+                    <TextBlock Text="• Direct3D 12 渲染后端" />
+                    <TextBlock Text="• 本地导入，无 Steam 登录" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

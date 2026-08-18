@@ -1,0 +1,22 @@
+## .NET
+bin/
+obj/
+.vs/
+.idea/
+*.user
+*.suo
+
+## Visual Studio / Rider caches
+TestResults/
+ReSharperPlatformLogs/
+
+## Build output and local packages
+artifacts/
+packages/
+*.nupkg
+
+## Wallpaper233 local data
+.wallpaper233/
+local-wallpapers/
+crash-dumps/
+performance-captures/

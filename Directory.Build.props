@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>14.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <Deterministic>true</Deterministic>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RepositoryUrl>https://github.com/neko233-com/Wallpaper233</RepositoryUrl>
+    <Authors>Wallpaper233 contributors</Authors>
+    <Company>Wallpaper233 contributors</Company>
+  </PropertyGroup>
+</Project>
