@@ -12,6 +12,11 @@
     Drop="PageDrop"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <local:LibraryThumbnailConverter x:Key="LibraryThumbnailConverter" />
+        <local:VideoBadgeVisibilityConverter x:Key="VideoBadgeVisibilityConverter" />
+    </Page.Resources>
+
     <NavigationView x:Name="Navigation"
                     IsBackButtonVisible="Collapsed"
                     IsSettingsVisible="False"
@@ -74,22 +79,51 @@
                         </StackPanel>
                     </Border>
 
-                    <ListView x:Name="LibraryList" Grid.Row="4" SelectionMode="Single" DoubleTapped="LibraryDoubleTapped">
+                    <ListView x:Name="LibraryList"
+                              Grid.Row="4"
+                              SelectionMode="Single"
+                              DoubleTapped="LibraryDoubleTapped"
+                              Padding="0,0,0,12">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsWrapGrid Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="core:LibraryItem">
-                                <Grid Padding="10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="42" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <FontIcon Glyph="&#xE7B8;" FontSize="20" VerticalAlignment="Center" />
-                                    <StackPanel Grid.Column="1" Spacing="2">
-                                        <TextBlock Text="{x:Bind DisplayName}" FontSize="15" />
-                                        <TextBlock Text="{x:Bind FilePath}" Opacity="0.55" TextTrimming="CharacterEllipsis" />
-                                    </StackPanel>
-                                    <TextBlock Grid.Column="2" Text="{x:Bind MediaKind}" Opacity="0.68" VerticalAlignment="Center" />
-                                </Grid>
+                                <Border Width="224"
+                                        Height="154"
+                                        Margin="0,0,14,14"
+                                        CornerRadius="10"
+                                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                        BorderThickness="1">
+                                    <Grid>
+                                        <Image Source="{Binding Converter={StaticResource LibraryThumbnailConverter}}"
+                                               Stretch="UniformToFill" />
+                                        <Border Background="#55000000" />
+                                        <Border VerticalAlignment="Bottom"
+                                                Padding="10,8"
+                                                Background="#CC111111">
+                                            <TextBlock Text="{x:Bind DisplayName}"
+                                                       FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       TextTrimming="CharacterEllipsis" />
+                                        </Border>
+                                        <Border HorizontalAlignment="Right"
+                                                VerticalAlignment="Top"
+                                                Margin="8"
+                                                Padding="7,4"
+                                                CornerRadius="5"
+                                                Background="#CC111111"
+                                                Visibility="{x:Bind MediaKind, Converter={StaticResource VideoBadgeVisibilityConverter}}">
+                                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                                <FontIcon Glyph="&#xE768;" FontSize="12" />
+                                                <TextBlock Text="视频" FontSize="11" />
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </Border>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
